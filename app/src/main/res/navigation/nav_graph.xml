@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.linkan.testingapp.FirstFragment"
+        android:name="com.linkan.testingapp.fragments.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.linkan.testingapp.SecondFragment"
+        android:name="com.linkan.testingapp.fragments.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/thirdFragment"
-        android:name="com.linkan.testingapp.ThirdFragment"
+        android:name="com.linkan.testingapp.fragments.ThirdFragment"
         android:label="fragment_third"
         tools:layout="@layout/fragment_third" >
         <action
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/fourFragment"
-        android:name="com.linkan.testingapp.FourFragment"
+        android:name="com.linkan.testingapp.fragments.FourFragment"
         android:label="fragment_four"
         tools:layout="@layout/fragment_four" >
         <action
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/fiveFragment"
-        android:name="com.linkan.testingapp.FiveFragment"
+        android:name="com.linkan.testingapp.fragments.FiveFragment"
         android:label="fragment_five"
         tools:layout="@layout/fragment_five" >
         <action
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/sixFragment"
-        android:name="com.linkan.testingapp.SixFragment"
+        android:name="com.linkan.testingapp.fragments.SixFragment"
         android:label="fragment_six"
         tools:layout="@layout/fragment_six" />
 </navigation>

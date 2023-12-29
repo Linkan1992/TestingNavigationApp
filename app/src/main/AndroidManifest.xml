@@ -13,6 +13,18 @@
         android:theme="@style/Theme.TestingApp"
         tools:targetApi="31">
         <activity
+            android:name="com.linkan.testingapp.ActivityFour"
+            android:exported="false" />
+        <activity
+            android:name="com.linkan.testingapp.ActivityThree"
+            android:exported="false" />
+        <activity
+            android:name="com.linkan.testingapp.ActivityTwo"
+            android:exported="false" />
+        <activity
+            android:name="com.linkan.testingapp.ActivityOne"
+            android:exported="false" />
+        <activity
             android:name="com.linkan.testingapp.MainActivity"
             android:exported="true"
             android:label="@string/app_name"

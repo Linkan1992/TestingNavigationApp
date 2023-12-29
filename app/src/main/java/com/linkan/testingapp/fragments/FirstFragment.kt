@@ -1,4 +1,4 @@
-package com.linkan.testingapp
+package com.linkan.testingapp.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
