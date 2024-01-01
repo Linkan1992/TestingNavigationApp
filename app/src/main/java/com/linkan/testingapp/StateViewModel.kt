@@ -40,6 +40,9 @@ class StateViewModel : ViewModel() {
         viewModelScope.launch {
             repeat(100){ intValue ->
                  delay(100)
+              /*  _integerStateFlow.update {
+                    return@update intValue
+                }*/
                 _integerStateFlow.value = intValue
                 _integerSharedFlow.emit(intValue)
             }
