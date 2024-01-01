@@ -1,6 +1,7 @@
 package com.linkan.testingapp
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -16,6 +17,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,4 +58,36 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "Activity Callback : onStart")
+    }
+
+    override fun onResume() {
+        Log.d(TAG, "Activity Callback : onResume")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "Activity Callback : onPause")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Log.d(TAG, "Activity Callback : onStop")
+        super.onStop()
+    }
+
+    override fun onRestart() {
+        Log.d(TAG, "Activity Callback : onRestart")
+        super.onRestart()
+    }
+
+    override fun onDestroy() {
+        Log.d(TAG, "Activity Callback : onDestroy")
+        super.onDestroy()
+    }
+
 }
