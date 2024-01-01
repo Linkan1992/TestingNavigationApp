@@ -29,6 +29,7 @@ class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
     private val TAG = "MainActivity"
+    private val TAG1 = "FirstFragment"
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -57,11 +58,11 @@ class FirstFragment : Fragment() {
             mViewModel.emitData()
         }
 
-       /* viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mViewModel.integerStateFlow.collect { intValue ->
                 Log.d(TAG, "launchWhenStarted Collected Value >> $intValue")
             }
-        }*/
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -70,6 +71,26 @@ class FirstFragment : Fragment() {
                     .collect { intValue ->
                     Log.d(TAG, "repeatOnLifecycle Collected Value >> $intValue")
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                mViewModel
+                    .integerSharedFlow
+                    .collect { intValue ->
+                        Log.d(TAG, "IntegerSharedFlow Collected Value >> $intValue")
+                    }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                mViewModel
+                    .integerFlow
+                    .collect { intValue ->
+                        Log.d(TAG, "IntegerFlow Collected Value >> $intValue")
+                    }
             }
         }
 
@@ -84,7 +105,6 @@ class FirstFragment : Fragment() {
 
     private fun observeLiveData() {
         mViewModel.searchResultLiveData.observe(viewLifecycleOwner){ result ->
-
             when(result){
                 is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is Resource.Success -> {
