@@ -14,8 +14,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.atilsamancioglu.artbookhilttesting.R
 import com.atilsamancioglu.artbookhilttesting.databinding.FragmentFirstBinding
+import com.google.firebase.appdistribution.ktx.appDistribution
+import com.google.firebase.ktx.Firebase
 import com.linkan.testingapp.Resource
 import com.linkan.testingapp.StateViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
@@ -50,13 +53,38 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.buttonSendFeedback.setOnClickListener {
+            Firebase.appDistribution.startFeedback("Submit Feedback")
+        }
+
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
 
         binding.buttonTwo.setOnClickListener {
             mViewModel.emitData()
+
+            //mViewModel.experimentCoroutineWithUnhandledException()
+            mViewModel.experimentAsyncWithUnhandledException()
+
+            mViewModel.experimentInheritance()
         }
+
+        binding.buttonEmitFlow.setOnClickListener {
+           // mViewModel.emitStateFlowData()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                mViewModel
+                    .emitStateFlowData()
+                    .collect { intValue ->
+                        Log.d(TAG1, "Flow Pipe cold >> hot Collected Value >> $intValue")
+                    }
+            }
+        }
+
+
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mViewModel.integerStateFlow.collect { intValue ->

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "860245518965",
+    "project_id": "com-gurpreet-location",
+    "storage_bucket": "com-gurpreet-location.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860245518965:android:525de05f1b93b9021a663c",
+        "android_client_info": {
+          "package_name": "com.example.locationpermission"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvD48tvygGPFPck7ei5OwbjwHLEdSJJsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860245518965:android:678178432e1720241a663c",
+        "android_client_info": {
+          "package_name": "com.linkan.inappfeedback"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvD48tvygGPFPck7ei5OwbjwHLEdSJJsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

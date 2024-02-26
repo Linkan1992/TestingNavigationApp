@@ -12,6 +12,9 @@ import android.view.Menu
 import android.view.MenuItem
 import com.atilsamancioglu.artbookhilttesting.R
 import com.atilsamancioglu.artbookhilttesting.databinding.ActivityMainBinding
+import com.google.firebase.appdistribution.InterruptionLevel
+import com.google.firebase.appdistribution.ktx.appDistribution
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,7 +38,24 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { view ->
             ActivityOne.navigateToActivity(this)
         }
+
+        //enableInAppTesterNotificationFeedback()
+
+        binding.fabSendFeedback.setOnClickListener {
+            Firebase.appDistribution.startFeedback("Submit Feedback")
+        }
     }
+
+    private fun enableInAppTesterNotificationFeedback() {
+        Firebase.appDistribution.showFeedbackNotification(
+            // Text providing notice to your testers about collection and
+            // processing of their feedback data
+            "Submit Feedback",
+            // The level of interruption for the notification
+            InterruptionLevel.HIGH)
+    }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -1,20 +1,40 @@
 package com.linkan.testingapp
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import com.linkan.testingapp.test_inheritance.KilometerToMiles
+import com.linkan.testingapp.test_inheritance.KilometerToMilesConverter
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withContext
+
 
 class StateViewModel : ViewModel() {
+
+    val hadnler = CoroutineExceptionHandler(){ context, throwable ->
+
+    }
+
+    val scope = CoroutineScope(SupervisorJob() + hadnler + Dispatchers.IO)
 
     private val _integerStateFlow = MutableStateFlow<Int>(0)
 
@@ -36,6 +56,7 @@ class StateViewModel : ViewModel() {
 
 
 
+
     fun emitData(){
         viewModelScope.launch {
             repeat(100){ intValue ->
@@ -47,6 +68,33 @@ class StateViewModel : ViewModel() {
                 _integerSharedFlow.emit(intValue)
             }
         }
+    }
+
+    fun experimentCoroutineWithUnhandledException(){
+        // crash app
+        GlobalScope.launch {
+            showMessage("Inhale")
+            delay(2000)
+            throw NullPointerException()
+            showMessage("Exhale")
+        }
+    }
+
+
+    fun experimentAsyncWithUnhandledException(){
+        // does not crash app
+        viewModelScope.async {
+            showMessage("Inhale")
+            delay(2000)
+            throw NullPointerException()
+            showMessage("Exhale")
+        }
+    }
+
+
+
+    private suspend fun showMessage(message : String){
+        Log.d("StateViewModel", "Message is >> $message")
     }
 
 
@@ -74,6 +122,38 @@ class StateViewModel : ViewModel() {
         })
 
         return livedata
+    }
+
+    fun experimentInheritance() {
+        val object1 : KilometerToMiles = KilometerToMilesConverter() // it first looks for child methods and if not available then check in parent
+        val object2 : KilometerToMilesConverter = KilometerToMilesConverter()
+        val object3 : KilometerToMiles = KilometerToMiles()
+
+
+        Log.d("StateViewModel", "Case-1 is object1.convertKmToMiles(1.0)  >> ${object1.convertKmToMiles(1.0)}")
+        Log.d("StateViewModel", "Case-2 is object1.convertKmToMiles()  >> ${object1.convertKmToMiles()}")
+        Log.d("StateViewModel", "Case-3 is object2.convertKmToMiles(1.0)  >> ${object2.convertKmToMiles(1.0)}")
+        Log.d("StateViewModel", "Case-4 is object2.convertKmToMiles()  >> ${object2.convertKmToMiles()}")
+        Log.d("StateViewModel", "Case-5 is object3.convertKmToMiles(1.0)  >> ${object3.convertKmToMiles(1.0)}")
+        Log.d("StateViewModel", "Case-6 is object3.convertKmToMiles()  >> ${object3.convertKmToMiles()}")
+    }
+
+    var count = 0
+    private val intFlow = flow<Int>{
+
+        while(true){
+            delay(100)
+            emit(++count)
+        }
+    }
+
+
+    fun emitStateFlowData() : StateFlow<Int> {
+        return intFlow.stateIn(
+            initialValue = 0,
+            scope = viewModelScope,
+            started = WhileSubscribed(5000)
+        )
     }
 
 
