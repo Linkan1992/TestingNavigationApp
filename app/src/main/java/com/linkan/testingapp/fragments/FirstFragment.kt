@@ -16,13 +16,8 @@ import com.atilsamancioglu.artbookhilttesting.R
 import com.atilsamancioglu.artbookhilttesting.databinding.FragmentFirstBinding
 import com.google.firebase.appdistribution.ktx.appDistribution
 import com.google.firebase.ktx.Firebase
-import com.linkan.testingapp.Resource
+import com.linkan.testingapp.UiState
 import com.linkan.testingapp.StateViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
@@ -61,6 +56,33 @@ class FirstFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
 
+
+
+        buttonEmitFlowData()
+        buttonEmitStateFlow()
+        buttonSearchData()
+
+       // collectIntegerFlow()
+        collectColdToHotFlow()
+        collectStateLaunchWhenStarted()
+
+        collectIntegerStateFlow()
+        collectIntegerSharedFlow()
+
+        observeLiveData()
+    }
+
+    private fun buttonSearchData(){
+
+        binding.buttonSearch.setOnClickListener {
+            binding.etSearch.text?.toString()?.let {
+                mViewModel.searchQuery(it)
+            }
+        }
+    }
+
+    private fun buttonEmitFlowData(){
+
         binding.buttonTwo.setOnClickListener {
             mViewModel.emitData()
 
@@ -69,10 +91,17 @@ class FirstFragment : Fragment() {
 
             mViewModel.experimentInheritance()
         }
+    }
+
+    private fun buttonEmitStateFlow(){
 
         binding.buttonEmitFlow.setOnClickListener {
-           // mViewModel.emitStateFlowData()
+            mViewModel.emitStateFlowData()
         }
+
+    }
+
+    private fun collectColdToHotFlow(){
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -83,24 +112,31 @@ class FirstFragment : Fragment() {
                     }
             }
         }
+    }
 
-
+    private fun collectStateLaunchWhenStarted(){
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mViewModel.integerStateFlow.collect { intValue ->
                 Log.d(TAG, "launchWhenStarted Collected Value >> $intValue")
             }
         }
+    }
+
+    private fun collectIntegerStateFlow(){
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 mViewModel
                     .integerStateFlow
                     .collect { intValue ->
-                    Log.d(TAG, "repeatOnLifecycle Collected Value >> $intValue")
-                }
+                        Log.d(TAG, "IntegerStateFlow >> repeatOnLifecycle Collected Value >> $intValue")
+                    }
             }
         }
+    }
+
+    private fun collectIntegerSharedFlow(){
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -111,6 +147,9 @@ class FirstFragment : Fragment() {
                     }
             }
         }
+    }
+
+    private fun collectIntegerFlow(){
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -121,25 +160,17 @@ class FirstFragment : Fragment() {
                     }
             }
         }
-
-        binding.buttonSearch.setOnClickListener {
-            binding.etSearch.text?.toString()?.let {
-                mViewModel.searchQuery(it)
-            }
-        }
-
-        observeLiveData()
     }
 
     private fun observeLiveData() {
         mViewModel.searchResultLiveData.observe(viewLifecycleOwner){ result ->
             when(result){
-                is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is Resource.Success -> {
+                is UiState.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is UiState.Success -> {
                     binding.textviewFirst.text = "Searched Query is >> ${result.data}"
                     binding.progressBar.visibility = View.GONE
                 }
-                is Resource.Error -> {
+                is UiState.Error -> {
                     Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
                 }

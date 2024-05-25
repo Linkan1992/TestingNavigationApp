@@ -15,7 +15,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,8 +23,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.withContext
 
 
 class StateViewModel : ViewModel() {
@@ -49,7 +46,7 @@ class StateViewModel : ViewModel() {
 
      val integerFlow = flow<Int>{
         repeat(100){ intValue ->
-            delay(100)
+            delay(1000)
             emit(intValue)
         }
     }
@@ -60,7 +57,7 @@ class StateViewModel : ViewModel() {
     fun emitData(){
         viewModelScope.launch {
             repeat(100){ intValue ->
-                 delay(100)
+                 delay(1000)
               /*  _integerStateFlow.update {
                     return@update intValue
                 }*/
@@ -108,17 +105,17 @@ class StateViewModel : ViewModel() {
         executeSearch(searchQuery)
     }
 
-    private fun executeSearch(searchString : String) : LiveData<Resource<String>> {
+    private fun executeSearch(searchString : String) : LiveData<UiState<String>> {
 
-        val livedata = MutableLiveData<Resource<String>>()
+        val livedata = MutableLiveData<UiState<String>>()
 
         viewModelScope.runOnBackgroundDispatcher(startLoader = {
-            livedata.value = Resource.Loading(null)
+            livedata.value = UiState.Loading(null)
         }, backgroundFunc = {
             delay(2000)
             return@runOnBackgroundDispatcher searchString
         }, callback = { response ->
-            livedata.value = Resource.Success(response)
+            livedata.value = UiState.Success(response)
         })
 
         return livedata
@@ -140,10 +137,14 @@ class StateViewModel : ViewModel() {
 
     var count = 0
     private val intFlow = flow<Int>{
-
-        while(true){
-            delay(100)
+        /*while(true){
+            delay(1000)
             emit(++count)
+        }*/
+
+        repeat(100){ currValue ->
+            delay(1000)
+            emit(currValue)
         }
     }
 
