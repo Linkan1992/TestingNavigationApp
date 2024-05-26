@@ -15,8 +15,9 @@ import com.atilsamancioglu.artbookhilttesting.R
 import com.atilsamancioglu.artbookhilttesting.databinding.FragmentSecondBinding
 import com.atilsamancioglu.artbookhilttesting.databinding.ItemLayoutMergeBinding
 import com.atilsamancioglu.artbookhilttesting.databinding.ItemLayoutViewStubBinding
+import com.linkan.testingapp.applyPermissionIf
+import com.linkan.testingapp.onClick
 import com.linkan.testingapp.viewmodels.FragmentSecondViewModel
-import com.linkan.testingapp.viewmodels.onClick
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -56,9 +57,10 @@ class SecondFragment : Fragment() {
 
         simulateCorrectSupervisorScope()
         simulateWrongSupervisorScope()
+        simulateExtensionFunction()
 
         inflatedViewStub.findViewById<TextView>(R.id.tv_colorView).setOnClickListener {
-            Toast.makeText(context, "Hellow inflated viewStub", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Hello inflated viewStub", Toast.LENGTH_SHORT).show()
             inflatedViewStub.visibility = View.GONE
         }
 
@@ -76,6 +78,20 @@ class SecondFragment : Fragment() {
 
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_thirdFragment)
+        }
+    }
+
+    private fun simulateExtensionFunction() {
+        binding.buttonFive.onClick(300){
+            Log.d(TAG, "OnClick method called >> ${viewModel.applyIfExtensionFun}")
+
+            requireActivity().applyPermissionIf(requireContext(), false, "Internet is not available",
+                success = {
+                    Log.d(TAG, "Permission available")
+            }, failure = {
+                    Log.d(TAG, "Request permission")
+            })
+
         }
     }
 

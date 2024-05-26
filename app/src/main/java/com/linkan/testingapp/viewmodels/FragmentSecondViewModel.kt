@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.linkan.testingapp.applyIf
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,29 +13,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
-
-
-fun View.onClick(debounceDuration: Long = 300L, action: (View) -> Unit) {
-    setOnClickListener(DebouncedOnClickListener(debounceDuration) {
-        action(it)
-    })
-}
-
-private class DebouncedOnClickListener(
-    private val debounceDuration: Long,
-    private val clickAction: (View) -> Unit
-) : View.OnClickListener {
-
-    private var lastClickTime: Long = 0
-
-    override fun onClick(v: View) {
-        val now = SystemClock.elapsedRealtime()
-        if (now - lastClickTime >= debounceDuration) {
-            lastClickTime = now
-            clickAction(v)
-        }
-    }
-}
 
 class FragmentSecondViewModel : ViewModel() {
 
@@ -119,6 +97,12 @@ class FragmentSecondViewModel : ViewModel() {
     private suspend fun getData3(): String {
         delay(800)
         return "data 3"
+    }
+
+    val number = 10
+    val applyIfExtensionFun = number.applyIf(number > 10){
+        number*10
+        Log.d(TAG, "OnClick method called >> ${number*10}")
     }
 
 }
