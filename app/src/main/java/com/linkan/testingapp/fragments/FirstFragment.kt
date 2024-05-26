@@ -17,7 +17,7 @@ import com.atilsamancioglu.artbookhilttesting.databinding.FragmentFirstBinding
 import com.google.firebase.appdistribution.ktx.appDistribution
 import com.google.firebase.ktx.Firebase
 import com.linkan.testingapp.UiState
-import com.linkan.testingapp.StateViewModel
+import com.linkan.testingapp.viewmodels.StateViewModel
 import kotlinx.coroutines.launch
 
 /**

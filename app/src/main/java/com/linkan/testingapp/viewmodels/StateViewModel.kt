@@ -1,4 +1,4 @@
-package com.linkan.testingapp
+package com.linkan.testingapp.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import com.linkan.testingapp.UiState
+import com.linkan.testingapp.runOnBackgroundDispatcher
 import com.linkan.testingapp.test_inheritance.KilometerToMiles
 import com.linkan.testingapp.test_inheritance.KilometerToMilesConverter
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -27,11 +29,11 @@ import kotlinx.coroutines.launch
 
 class StateViewModel : ViewModel() {
 
-    val hadnler = CoroutineExceptionHandler(){ context, throwable ->
+    val handler = CoroutineExceptionHandler{ context, throwable ->
 
     }
 
-    val scope = CoroutineScope(SupervisorJob() + hadnler + Dispatchers.IO)
+    val scope = CoroutineScope(SupervisorJob() + handler + Dispatchers.IO)
 
     private val _integerStateFlow = MutableStateFlow<Int>(0)
 
