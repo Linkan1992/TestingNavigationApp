@@ -56,6 +56,14 @@ class FirstFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
 
+        binding.btnBanking.setOnClickListener {
+            // init Banking Firebase instance
+        }
+
+        binding.btnCard.setOnClickListener {
+            // init Card Firebase instance
+        }
+
 
 
         buttonEmitFlowData()

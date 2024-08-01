@@ -12,7 +12,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.linkan.inappfeedback"
+        applicationId "com.linkan.inappfeedback_banking"
         minSdkVersion 23
         targetSdkVersion 34
         versionCode 2
@@ -119,6 +119,8 @@ dependencies {
 
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics'
+
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
 
     // ADD the API-only library to all variants
     implementation("com.google.firebase:firebase-appdistribution-api-ktx:16.0.0-beta12")
