@@ -2,11 +2,11 @@ package com.linkan.testingapp.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,11 +14,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.atilsamancioglu.artbookhilttesting.R
 import com.atilsamancioglu.artbookhilttesting.databinding.FragmentFirstBinding
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import com.google.firebase.appdistribution.ktx.appDistribution
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
+import com.google.firebase.messaging.FirebaseMessaging
 import com.linkan.testingapp.UiState
 import com.linkan.testingapp.viewmodels.StateViewModel
 import kotlinx.coroutines.launch
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -58,10 +64,63 @@ class FirstFragment : Fragment() {
 
         binding.btnBanking.setOnClickListener {
             // init Banking Firebase instance
+            FirebaseApp.initializeApp(
+                requireContext(), FirebaseOptions.Builder()
+                    .setApplicationId("1:159635962604:android:46368d98283f09e5d943c9") //mobilesdk_app_id
+                    .setApiKey("AIzaSyA0NQWumMuSyfTqMaP83QYnSAvG2QsUc40")//current_key
+                    .setDatabaseUrl("https://pushnotification-625fd.firebaseio.com")//firebase_url
+                    .setGcmSenderId("159635962604")//project_number
+                    .setStorageBucket("pushnotification-625fd.appspot.com")//storage_bucket
+                    .setProjectId("pushnotification-625fd")//project_id
+                    .build(),
+                "Bank").also {
+                    val firebaseMessaging = it.get(FirebaseMessaging::class.java)
+                    /*firebaseMessaging.token.result.apply {
+                        Thread.sleep(1000)
+                        // Store or send the new FCM token to your server for further use
+                        Log.d("MyFirebaseMessagingService", "New Token: $this")
+                    }*/
+
+                firebaseMessaging.token.addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                        return@OnCompleteListener
+                    }
+
+                    // Get new FCM registration token
+                    val token = task.result
+
+                    Log.d("MyFirebaseMessagingService", "Current Token: $token")
+                })
+            }
         }
 
         binding.btnCard.setOnClickListener {
             // init Card Firebase instance
+            FirebaseApp.initializeApp(
+                requireContext(), FirebaseOptions.Builder()
+                    .setApplicationId("1:24217414101:android:d9219e258cf21fbfec755c") //mobilesdk_app_id
+                    .setApiKey("AIzaSyDO_1HQrQIH_Q2uk6hNsczu_WkZIrywwbI")//current_key
+                    .setDatabaseUrl("https://notification-66a8a.firebaseio.com")//firebase_url
+                    .setGcmSenderId("24217414101")//project_number
+                    .setStorageBucket("notification-66a8a.appspot.com")//storage_bucket
+                    .setProjectId("notification-66a8a")//project_id
+                    .build(),
+                "Card").also {
+                val firebaseMessaging = it.get(FirebaseMessaging::class.java)
+
+                firebaseMessaging.token.addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                        return@OnCompleteListener
+                    }
+
+                    // Get new FCM registration token
+                    val token = task.result
+
+                    Log.d("MyFirebaseMessagingService", "Current Token: $token")
+                })
+            }
         }
 
 
